@@ -1,4 +1,9 @@
-invisible(capture.output({suppressWarnings(library(edgeR), library(genefu))}))
+invisible(capture.output(
+  suppressPackageStartupMessages(suppressWarnings({
+    library(edgeR)
+    library(genefu)
+  }))
+))
 
 
 tmm_logcpm_tsv <- function(input_tsv, output_tsv, prior_count = 1.0, return_df = TRUE, save = TRUE) {
