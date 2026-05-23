@@ -19,7 +19,7 @@ The main limitation of `genefu` in this setting is that its PAM50 reference cent
 
 The first part of the analysis is available here:
 
-- [Subtype classification notebook](notebooks/Nbreast_cancer_subtype_classification.ipynb)
+- [Subtype classification notebook](notebooks/breast_cancer_subtype_classification.ipynb)
 
 #### What is done in this notebook
 
