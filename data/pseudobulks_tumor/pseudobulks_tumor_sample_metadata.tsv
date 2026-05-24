@@ -1,0 +1,126 @@
+sample_id	donor_id	cell_type	n_cells
+BC17086-12_Tumor__malignant cell	BC17086-12_Tumor	malignant cell	101
+BC17086-24_Tumor__malignant cell	BC17086-24_Tumor	malignant cell	1760
+BC17086-35_Tumor__malignant cell	BC17086-35_Tumor	malignant cell	2512
+BC302_Tumor__malignant cell	BC302_Tumor	malignant cell	2605
+BC389_Tumor__malignant cell	BC389_Tumor	malignant cell	104
+BC392_Tumor__malignant cell	BC392_Tumor	malignant cell	3362
+BC393_Tumor__malignant cell	BC393_Tumor	malignant cell	4939
+BC394_Tumor__malignant cell	BC394_Tumor	malignant cell	945
+BC397_Tumor__malignant cell	BC397_Tumor	malignant cell	1450
+BC401_Tumor__malignant cell	BC401_Tumor	malignant cell	5106
+BC419_Tumor__malignant cell	BC419_Tumor	malignant cell	210
+BIOKEY_10__malignant cell	BIOKEY_10	malignant cell	2387
+BIOKEY_11__malignant cell	BIOKEY_11	malignant cell	535
+BIOKEY_12__malignant cell	BIOKEY_12	malignant cell	1401
+BIOKEY_14__malignant cell	BIOKEY_14	malignant cell	283
+BIOKEY_15__malignant cell	BIOKEY_15	malignant cell	1114
+BIOKEY_16__malignant cell	BIOKEY_16	malignant cell	429
+BIOKEY_17__malignant cell	BIOKEY_17	malignant cell	1747
+BIOKEY_18__malignant cell	BIOKEY_18	malignant cell	200
+BIOKEY_19__malignant cell	BIOKEY_19	malignant cell	591
+BIOKEY_1__malignant cell	BIOKEY_1	malignant cell	805
+BIOKEY_20__malignant cell	BIOKEY_20	malignant cell	177
+BIOKEY_21__malignant cell	BIOKEY_21	malignant cell	1196
+BIOKEY_22__malignant cell	BIOKEY_22	malignant cell	252
+BIOKEY_24__malignant cell	BIOKEY_24	malignant cell	810
+BIOKEY_25__malignant cell	BIOKEY_25	malignant cell	57
+BIOKEY_26__malignant cell	BIOKEY_26	malignant cell	1340
+BIOKEY_27__malignant cell	BIOKEY_27	malignant cell	332
+BIOKEY_28__malignant cell	BIOKEY_28	malignant cell	268
+BIOKEY_29__malignant cell	BIOKEY_29	malignant cell	305
+BIOKEY_2__malignant cell	BIOKEY_2	malignant cell	521
+BIOKEY_30__malignant cell	BIOKEY_30	malignant cell	2975
+BIOKEY_31__malignant cell	BIOKEY_31	malignant cell	2078
+BIOKEY_3__malignant cell	BIOKEY_3	malignant cell	409
+BIOKEY_4__malignant cell	BIOKEY_4	malignant cell	748
+BIOKEY_5__malignant cell	BIOKEY_5	malignant cell	190
+BIOKEY_6__malignant cell	BIOKEY_6	malignant cell	2624
+BIOKEY_7__malignant cell	BIOKEY_7	malignant cell	538
+BIOKEY_9__malignant cell	BIOKEY_9	malignant cell	1804
+Patient1_T2__malignant cell	Patient1_T2	malignant cell	3548
+Patient2_T3__malignant cell	Patient2_T3	malignant cell	564
+Patient3_T6__malignant cell	Patient3_T6	malignant cell	180
+Patient4_T7__malignant cell	Patient4_T7	malignant cell	2636
+TBB011__malignant cell	TBB011	malignant cell	214
+TBB035__malignant cell	TBB035	malignant cell	2210
+TBB075__malignant cell	TBB075	malignant cell	3396
+TBB102__malignant cell	TBB102	malignant cell	1551
+TBB111__malignant cell	TBB111	malignant cell	270
+TBB129__malignant cell	TBB129	malignant cell	891
+TBB184__malignant cell	TBB184	malignant cell	1154
+TBB212__malignant cell	TBB212	malignant cell	843
+TBB214__malignant cell	TBB214	malignant cell	79
+TBB226__malignant cell	TBB226	malignant cell	1365
+TBB330__malignant cell	TBB330	malignant cell	121
+TBB338__malignant cell	TBB338	malignant cell	1211
+gao_DCIS1__malignant cell	gao_DCIS1	malignant cell	1120
+gao_TNBC1__malignant cell	gao_TNBC1	malignant cell	756
+gao_TNBC2__malignant cell	gao_TNBC2	malignant cell	574
+gao_TNBC3__malignant cell	gao_TNBC3	malignant cell	211
+pal_Patient 0001__malignant cell	pal_Patient 0001	malignant cell	5704
+pal_Patient 0025__malignant cell	pal_Patient 0025	malignant cell	4694
+pal_Patient 0029-7C__malignant cell	pal_Patient 0029-7C	malignant cell	2412
+pal_Patient 0029-9C__malignant cell	pal_Patient 0029-9C	malignant cell	6826
+pal_Patient 0031__malignant cell	pal_Patient 0031	malignant cell	1581
+pal_Patient 0032__malignant cell	pal_Patient 0032	malignant cell	586
+pal_Patient 0040__malignant cell	pal_Patient 0040	malignant cell	5467
+pal_Patient 0042__malignant cell	pal_Patient 0042	malignant cell	2991
+pal_Patient 0043__malignant cell	pal_Patient 0043	malignant cell	3241
+pal_Patient 0056__malignant cell	pal_Patient 0056	malignant cell	3824
+pal_Patient 0064__malignant cell	pal_Patient 0064	malignant cell	3478
+pal_Patient 0068__malignant cell	pal_Patient 0068	malignant cell	930
+pal_Patient 0069__malignant cell	pal_Patient 0069	malignant cell	235
+pal_Patient 0106__malignant cell	pal_Patient 0106	malignant cell	51
+pal_Patient 0114__malignant cell	pal_Patient 0114	malignant cell	6543
+pal_Patient 0125__malignant cell	pal_Patient 0125	malignant cell	6008
+pal_Patient 0126__malignant cell	pal_Patient 0126	malignant cell	1180
+pal_Patient 0131__malignant cell	pal_Patient 0131	malignant cell	5441
+pal_Patient 0135__malignant cell	pal_Patient 0135	malignant cell	13939
+pal_Patient 0151__malignant cell	pal_Patient 0151	malignant cell	908
+pal_Patient 0161__malignant cell	pal_Patient 0161	malignant cell	4583
+pal_Patient 0163__malignant cell	pal_Patient 0163	malignant cell	5930
+pal_Patient 0167__malignant cell	pal_Patient 0167	malignant cell	5060
+pal_Patient 0173__malignant cell	pal_Patient 0173	malignant cell	3146
+pal_Patient 0176__malignant cell	pal_Patient 0176	malignant cell	5579
+pal_Patient 0177__malignant cell	pal_Patient 0177	malignant cell	1052
+pal_Patient 0178__malignant cell	pal_Patient 0178	malignant cell	10618
+pal_Patient 0308__malignant cell	pal_Patient 0308	malignant cell	3513
+pal_Patient 0319__malignant cell	pal_Patient 0319	malignant cell	585
+pal_Patient 0337__malignant cell	pal_Patient 0337	malignant cell	3852
+pal_Patient 0360__malignant cell	pal_Patient 0360	malignant cell	1995
+pal_Patient 0554__malignant cell	pal_Patient 0554	malignant cell	3214
+pal_Patient 4031__malignant cell	pal_Patient 4031	malignant cell	4912
+qian_41__malignant cell	qian_41	malignant cell	74
+qian_42__malignant cell	qian_42	malignant cell	2568
+qian_43__malignant cell	qian_43	malignant cell	436
+qian_44__malignant cell	qian_44	malignant cell	316
+qian_45__malignant cell	qian_45	malignant cell	641
+qian_47__malignant cell	qian_47	malignant cell	1211
+qian_48__malignant cell	qian_48	malignant cell	416
+qian_49__malignant cell	qian_49	malignant cell	554
+qian_51__malignant cell	qian_51	malignant cell	1885
+qian_53__malignant cell	qian_53	malignant cell	292
+qian_54__malignant cell	qian_54	malignant cell	3320
+wu_natgen_CID3586__malignant cell	wu_natgen_CID3586	malignant cell	706
+wu_natgen_CID3921__malignant cell	wu_natgen_CID3921	malignant cell	447
+wu_natgen_CID3941__malignant cell	wu_natgen_CID3941	malignant cell	196
+wu_natgen_CID3948__malignant cell	wu_natgen_CID3948	malignant cell	267
+wu_natgen_CID3963__malignant cell	wu_natgen_CID3963	malignant cell	230
+wu_natgen_CID4066__malignant cell	wu_natgen_CID4066	malignant cell	794
+wu_natgen_CID4067__malignant cell	wu_natgen_CID4067	malignant cell	2356
+wu_natgen_CID4290A__malignant cell	wu_natgen_CID4290A	malignant cell	4080
+wu_natgen_CID44041__malignant cell	wu_natgen_CID44041	malignant cell	151
+wu_natgen_CID4461__malignant cell	wu_natgen_CID4461	malignant cell	219
+wu_natgen_CID4463__malignant cell	wu_natgen_CID4463	malignant cell	685
+wu_natgen_CID4465__malignant cell	wu_natgen_CID4465	malignant cell	179
+wu_natgen_CID4471__malignant cell	wu_natgen_CID4471	malignant cell	2194
+wu_natgen_CID4495__malignant cell	wu_natgen_CID4495	malignant cell	1263
+wu_natgen_CID44971__malignant cell	wu_natgen_CID44971	malignant cell	1667
+wu_natgen_CID44991__malignant cell	wu_natgen_CID44991	malignant cell	4237
+wu_natgen_CID4513__malignant cell	wu_natgen_CID4513	malignant cell	140
+wu_natgen_CID4515__malignant cell	wu_natgen_CID4515	malignant cell	2210
+wu_natgen_CID45171__malignant cell	wu_natgen_CID45171	malignant cell	818
+wu_natgen_CID4523__malignant cell	wu_natgen_CID4523	malignant cell	1169
+wu_natgen_CID4530N__malignant cell	wu_natgen_CID4530N	malignant cell	2135
+wu_natgen_CID4535__malignant cell	wu_natgen_CID4535	malignant cell	2396

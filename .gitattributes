@@ -3,3 +3,6 @@ data/liana_tensor_cell2cell_result/tensor__mincell_20__exprprop_0p2__mindonorspr
 data/liana_tensor_cell2cell_result/liana_res_filtered_by_t_nt+nt_t__mincell_20__exprprop_0p2__mindonorsprop_0p4__interactmode_t_nt+nt_t.csv filter=lfs diff=lfs merge=lfs -text
 data/liana_tensor_cell2cell_result/liana_res_full__mincell_20__exprprop_0p2__mindonorsprop_0p4__interactmode_t_nt+nt_t.csv filter=lfs diff=lfs merge=lfs -text
 data/liana_tensor_cell2cell_result/liana_res_min_donors_filtered__mincell_20__exprprop_0p2__mindonorsprop_0p4__interactmode_t_nt+nt_t.csv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_all_cell_types/pseudobulks_tumor_counts_gene_by_sample.tsv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_all_cell_types/pseudobulks_tumor_sample_metadata.tsv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_tumor/ filter=lfs diff=lfs merge=lfs -text
