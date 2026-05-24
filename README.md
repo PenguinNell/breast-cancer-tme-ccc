@@ -44,7 +44,7 @@ Overall, the clustering-based labels show strong agreement with `genefu` for the
 
 #### Comparison with `genefu`
 
-![Clustering vs genefu confusion matrix](pics/clustering.png)
+![Clustering vs genefu confusion matrix](imgs/clustering.png)
 
 ### Part 2a: Data preparation for cell-cell communication analysis
 
@@ -133,7 +133,7 @@ This program differs significantly across PAM50 subtypes:
 - also enriched in **ERBB2+**
 - weaker in **Luminal A** and **Luminal B**
 
-![Tensor score across subtypes](pics/tensor_score_by_subtypes.png)
+![Tensor score across subtypes](imgs/tensor_score_by_subtypes.png)
 
 After filtering to curated interactions, the same subtype trend remains significant both for both TME -> Tumor and Tumor -> TME signaling.
 
@@ -141,9 +141,9 @@ After filtering to curated interactions, the same subtype trend remains signific
 
 The inferred factor combines two major components:
 - a **stromal-to-tumor axis**, dominated by Fibroblast/Stromal, Endothelial, and Mural cells;
-- a **tumor-to-immune axis**, dominated by malignant-cell signaling toward Macrophage, Dendritic_cell, Treg, NK.
+- a **tumor-to-immune axis**, dominated by malignant cell signaling toward Macrophage, Dendritic_cell, Treg, NK.
 
-![Communication scheme](pics/communication_scheme.png)
+![Communication scheme](imgs/communication_scheme.png)
 
 **Top LR-interactions:**
 | TME -> Tumor (Stromal) | Tumor -> TME (Immune) |
