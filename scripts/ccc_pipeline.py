@@ -4,10 +4,6 @@ import pickle
 import warnings
 from pathlib import Path
 
-import scanpy as sc
-import liana as li
-import cell2cell as c2c
-
 warnings.filterwarnings('ignore')
 
 
@@ -76,19 +72,22 @@ def filter_interactions(df, interaction_mode, tumor_label):
 
 
 def run_liana(
-    adata_path,
-    outdir,
-    min_cells,
-    expr_prop,
-    min_donors_prop,
-    interaction_mode,
-    subtype_col,
-    sample_col,
-    celltype_col,
-    param_suffix,
-    tumor_label,
-    interaction_mode_tag
-):
+        adata_path,
+        outdir,
+        min_cells,
+        expr_prop,
+        min_donors_prop,
+        interaction_mode,
+        subtype_col,
+        sample_col,
+        celltype_col,
+        param_suffix,
+        tumor_label,
+        interaction_mode_tag
+    ):
+    import scanpy as sc # too large to load at startup
+    import liana as li # too large to load at startup
+
     adata = sc.read_h5ad(adata_path)
     context_df = adata.obs[[sample_col, subtype_col]].drop_duplicates()
 
@@ -161,7 +160,18 @@ def run_liana(
     return liana_res_selected, context_df
 
 
-def run_tensor(liana_res_filt, context_df, sample_col, subtype_col, outdir, param_suffix, device):
+def run_tensor(
+        liana_res_filt, 
+        context_df, 
+        sample_col, 
+        subtype_col, 
+        outdir, 
+        param_suffix, 
+        device
+    ):
+    import liana as li # too large to load at startup
+    import cell2cell as c2c # too large to load at startup
+
     context_map = context_df.set_index(sample_col)[subtype_col].to_dict()
 
     print('\nBuilding a Tensor')
