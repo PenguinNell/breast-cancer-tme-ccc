@@ -6,14 +6,14 @@
 
 ## Results
 
-### Part 1: Breast cancer subtype classification from tumor-cell pseudobulks
+### Part 1: Breast cancer subtype classification using tumor-cell pseudobulks
 
 The goal is to compare two subtype assignment strategies:
 
 - **PAM50 classification with `genefu`**, the standard approach;
 - a **custom RNA-seq-oriented classifier** based on sequential hierarchical clustering with published subtype-discriminative gene panels.
 
-The main limitation of `genefu` in this setting is that its PAM50 reference centroids were derived from **microarray** data, whereas this project works with **RNA-seq* data.
+The main limitation of `genefu` in this setting is that its PAM50 reference centroids were derived from **microarray** data, whereas this project uses **RNA-seq** data.
 
 #### Analysis notebook
 
@@ -40,7 +40,9 @@ The custom clustering-based workflow produces a four-class solution:
 - **LumA**: 35
 - **LumB**: 36
 
-Overall, the clustering-based labels show strong agreement with `genefu` for the **Basal** group, moderate agreement for **ERBB2**, and a less stable split between **LumA** and **LumB**. This is expected, since LumA and LumB are biologically closer. At the same time, the heatmap suggests that the clustering-based approach separates luminal samples more clearly than `genefu`.
+Overall, the clustering-based labels show strong agreement with `genefu` for the **Basal-like** group, moderate agreement for **ERBB2+**, and a less stable split between **Luminal A** and **Luminal B**. This is expected, since Luminal A and Luminal B are biologically closer. 
+
+At the same time, the heatmap suggests that the clustering-based approach separates luminal samples more clearly than `genefu` does.
 
 #### Comparison with `genefu`
 
@@ -48,9 +50,8 @@ Overall, the clustering-based labels show strong agreement with `genefu` for the
 
 ### Part 2a: Data preparation for cell-cell communication analysis
 
-The goal of this step is to prepare the breast cancer scRNA-seq atlas for downstream **cell-cell communication analysis**.
+The goal of this step is to prepare the breast cancer scRNA-seq atlas for downstream **LIANA + Tensor-cell2cell** analysis and to generate **cell-type-specific pseudobulks** for subsequent **edgeR-based validation**.
 
-This notebook prepares the breast cancer scRNA-seq atlas for downstream **LIANA + Tensor-cell2cell** analysis and generates **cell-type-specific pseudobulks** for subsequent **edgeR-based validation**.
 
 #### Analysis notebook
 
@@ -76,19 +77,19 @@ For the communication analysis, these were collapsed into **16 major groups**.
 
 3. TME composition differences across PAM50 subtypes: significant subtype-dependent differences were detected for **9 of 15 non-malignant major cell types**. This indicates that PAM50 subtypes differ not only in tumor-cell expression states, but also in their TME composition.
 
-4. Preparation of HGNC-compatible gene annotations
+4. Preparation of HGNC-compatible gene annotations  
 Because LIANA expects **HGNC symbols**, the expression matrix was reformatted:
     - genes lacking HGNC symbols were removed;
     - duplicated HGNC entries were collapsed by retaining the gene with the highest total expression.
 
     The resulting filtered objects were saved to disk and will be used as input for the downstream LIANA + Tensor-cell2cell analysis in Part 2b.
 
-5. In addition, **donor-level pseudobulks stratified by cell type** were generated.
+5. In addition, donor-level pseudobulks separated by cell type were generated.
 
     These pseudobulks are intended for:
     - downstream differential expression analysis with **edgeR**;
     - validation of subtype-associated communication patterns detected by **LIANA + Tensor-cell2cell**;
-    - follow-up testing of whether ligand, receptor, or pathway-related signals highlighted in the communication analysis are also reflected at the expression level within specific cell compartments.
+    - follow-up testing of whether ligand-, receptor-, or pathway-related signals highlighted in the communication analysis are also reflected at the expression level within specific cell compartments.
 
 ### Part 2b: Cell-cell communication analysis across PAM50 breast cancer subtypes
 
@@ -98,7 +99,8 @@ This analysis combines:
 - **LIANA**, to infer donor-level ligand-receptor interactions;
 - **Tensor-cell2cell**, to decompose these interactions into latent communication programs shared across donors.
 
-The workflow focuses specifically on **tumor-microenvironment crosstalk**, restricting the analysis to:
+The workflow focuses specifically on **tumor-microenvironment crosstalk** and restricts the analysis to:
+
 - **tumor -> TME**
 - **TME -> tumor**
 
@@ -126,7 +128,7 @@ The second part of the analysis is available here: [Cell-cell communication note
 
 #### Main result
 
-Tensor-cell2cell identified **one dominant communication factor**, suggesting that the main variation in tumor-TME signaling can be summarized by a single latent program.
+Tensor-cell2cell identified **one dominant communication factor**, suggesting that the main variation in tumor-TME signaling can be captured by a single latent program.
 
 This program differs significantly across PAM50 subtypes:
 - it is **strongest in Basal-like**
@@ -135,7 +137,7 @@ This program differs significantly across PAM50 subtypes:
 
 ![Tensor score across subtypes](imgs/tensor_score_by_subtypes.png)
 
-After filtering to curated interactions, the same subtype trend remains significant both for both TME -> Tumor and Tumor -> TME signaling.
+After filtering to curated interactions, the same subtype trend remains significant for both TME -> Tumor and Tumor -> TME signaling.
 
 #### Biological interpretation
 
@@ -148,9 +150,9 @@ The inferred factor combines two major components:
 **Top LR-interactions:**
 | TME -> Tumor (Stromal) | Tumor -> TME (Immune) |
 |---|---|
-| COL1A1 \ COL1A2 ^ CD44** | MIF ^ CD74_CXCR4 |
-| FN1 ^ CD44 | MIF ^ CD44_CD74 |
-| APP ^ CD74 | APP ^ CD74 |
+| COL1A1 / COL1A2 -> CD44 | MIF -> CD74_CXCR4 |
+| FN1 -> CD44 | MIF -> CD44_CD74 |
+| APP -> CD74 | APP -> CD74 |
 
 Overall, the results point to a communication program combining **stromal remodeling** and **immune-modulatory signaling**, with higher activity in the more aggressive **Basal-like** and **ERBB2+** tumors and lower activity in the **Luminal** subtypes.
 
@@ -262,3 +264,58 @@ The pipeline writes multiple intermediate and final files to the output director
 - serialized **tensor metadata** object.
 
 Output file names automatically include the parameter settings used in the run, making it easier to track and compare analyses.
+
+### Part 3: Differential expression and pathway analysis across PAM50 subtypes
+
+This part of the analysis was performed entirely in **R**.
+
+The goal is to test whether the subtype-associated communication patterns identified in Part 2 are also reflected in donor-level gene expression within specific cell compartments.
+
+This step combines:
+- **edgeR**, to test differential expression across PAM50 subtypes within each major cell type;
+- **Reactome-based pathway scoring**, to evaluate whether receptor-linked signaling programs differ across subtypes in the relevant target cells.
+
+#### Analysis file
+
+The third part of the analysis is available here: [Differential expression and pathway analysis](notebooks/03_deg_and_pathway_analysis.Rmd)
+
+#### What is done in this notebook
+- donor-level cell-type-specific pseudobulks from Part 2a are loaded;
+- cell types with insufficient donor coverage are excluded;
+- differential expression across PAM50 subtypes is tested for each major cell type;
+- top subtype-associated genes are visualized as heatmaps;
+- the analysis focuses on cell types contributing most strongly to the CCC signal;
+- receptor-centered Reactome pathway programs are scored and compared across PAM50 subtypes with batch correction;
+- for each pathway, the score is calculated as the mean gene-wise z-scored logCPM across genes in the selected set, giving one score per donor × cell type sample.
+
+#### Main result
+
+Differential expression shows that PAM50-associated transcriptional differences are present not only in malignant cells, but also in several TME compartments.
+
+In the cell types most strongly involved in the CCC signal, expression follows the same broad trend as in Part 2:
+
+- higher in **Basal-like** and **ERBB2+**
+- lower in **Luminal** subtypes
+
+This supports the idea that the communication gradient identified by **LIANA + Tensor-cell2cell** is also reflected at the expression level.
+
+![DGE heatmaps](imgs/dge.png)
+
+#### Pathway-level interpretation
+
+The pathway analysis was designed as a targeted validation of the CCC results.
+
+Among the tested target populations, significant subtype-associated pathway differences were detected in:
+
+- **Malignant cell**:
+  - stromal program
+  - inflammatory program
+- **Macrophage**:
+  - inflammatory program
+
+This is consistent with the communication analysis, where the dominant program combined:
+
+- a **stromal TME -> Tumor axis**
+- a **tumor -> immune axis**
+
+Overall, the third part provides expression-level support for the main finding: PAM50 subtypes differ not only in tumor-cell state, but also in the structure of tumor-microenvironment communication.
