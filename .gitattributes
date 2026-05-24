@@ -9,3 +9,6 @@ data/pseudobulks_tumor/ filter=lfs diff=lfs merge=lfs -text
 data/pseudobulks_tumor/pseudobulks_tumor_counts_gene_by_sample.tsv filter=lfs diff=lfs merge=lfs -text
 data/pseudobulks_tumor/pseudobulks_tumor_sample_metadata.tsv filter=lfs diff=lfs merge=lfs -text
 data/pseudobulks_tumor/pseudobulks_tumor_counts_gene_by_sample_logcpm.tsv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_all_cell_types/pseudobulks_all_cell_types_sample_metadata.tsv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_all_cell_types/pseudobulks_all_cell_types_sample_subtype_batch_metadata.tsv filter=lfs diff=lfs merge=lfs -text
+data/pseudobulks_all_cell_types/pseudobulks_all_cell_types_counts_gene_by_sample.tsv filter=lfs diff=lfs merge=lfs -text
