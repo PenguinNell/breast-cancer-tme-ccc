@@ -138,11 +138,14 @@ This program differs significantly across PAM50 subtypes:
 After filtering to curated interactions, the same subtype trend remains significant both for both TME -> Tumor and Tumor -> TME signaling.
 
 #### Biological interpretation
+
 The inferred factor combines two major components:
 - a **stromal-to-tumor axis**, dominated by Fibroblast/Stromal, Endothelial, and Mural cells;
 - a **tumor-to-immune axis**, dominated by malignant-cell signaling toward Macrophage, Dendritic_cell, Treg, NK.
 
-Top LR-interactions:
+![Communication scheme](pics/communication_scheme.png)
+
+**Top LR-interactions:**
 | TME -> Tumor (Stromal) | Tumor -> TME (Immune) |
 |---|---|
 | COL1A1 \ COL1A2 ^ CD44** | MIF ^ CD74_CXCR4 |
