@@ -493,7 +493,9 @@ adhes_gene_set <- unique(unlist(gene_sets[adhes_program]))
 
 ### Test pathway-score differences across PAM50 subtypes
 
-For each selected program, I calculate a sample-level pathway score within the relevant target cell type and test whether it differs across PAM50 subtypes after accounting for batch.
+For each selected program, I calculated a sample-level `pathway score` within the relevant target cell type and test whether it differs across PAM50 subtypes after accounting for batch.
+
+Pathway scoring summarizes the expression of a predefined gene set into one sample-level value. Here, for each pathway and cell type, I z-scored logCPM values gene-wise across samples and define the `pathway score` as the mean standardized expression across genes in the set.
 
 Significance was assessed using omnibus partial F-tests from a linear model (`pathway_score_rank ~ PAM50_subtype + batch`), comparing the full model to models with each term removed (drop1, test = "F"). The false discovery rate was controlled using the Benjamini-Hochberg procedure.
 
