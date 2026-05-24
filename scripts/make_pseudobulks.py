@@ -5,7 +5,7 @@ import pandas as pd
 from anndata import AnnData
 
 
-def make_pseudobulk(
+def make_pseudobulks(
     adata: AnnData,
     donor_col: str,
     group_col: str,
@@ -13,16 +13,16 @@ def make_pseudobulk(
     return_pb: bool = False,
     save: bool = True,
     out_dir: str | Path | None = None,
-    counts_name: str = "pseudobulks_counts_gene_by_sample.tsv",
-    meta_name: str = "pseudobulks_sample_metadata.tsv",
+    counts_name: str = 'pseudobulks_counts_gene_by_sample.tsv',
+    meta_name: str = 'pseudobulks_sample_metadata.tsv',
 ) -> tuple[pd.DataFrame, pd.DataFrame] | None:
 
     obs = adata.obs.loc[:, [donor_col, group_col]].copy()
     obs[donor_col] = obs[donor_col].astype(str)
     obs[group_col] = obs[group_col].astype(str)
-    obs["sample_id"] = obs[donor_col] + "__" + obs[group_col]
+    obs['sample_id'] = obs[donor_col] + '__' + obs[group_col]
 
-    sample_ids = obs["sample_id"].to_numpy()
+    sample_ids = obs['sample_id'].to_numpy()
     uniq, inv = np.unique(sample_ids, return_inverse=True)
 
     n_samples = len(uniq)
@@ -35,23 +35,23 @@ def make_pseudobulk(
         pb[i, :] = np.asarray(adata.raw.X[rows].sum(axis=0)).ravel().astype(np.int64)
 
     meta_pb = (
-        obs.groupby("sample_id", observed=True)
+        obs.groupby('sample_id', observed=True)
         .agg({
-            donor_col: "first",
-            group_col: "first",
+            donor_col: 'first',
+            group_col: 'first',
         })
         .reindex(uniq)
         .reset_index()
     )
 
-    meta_pb["n_cells"] = (
-        obs.groupby("sample_id", observed=True)
+    meta_pb['n_cells'] = (
+        obs.groupby('sample_id', observed=True)
         .size()
         .reindex(uniq)
         .to_numpy()
     )
 
-    keep = meta_pb["n_cells"].ge(min_cells).to_numpy()
+    keep = meta_pb['n_cells'].ge(min_cells).to_numpy()
     pb = pb[keep, :]
     meta_pb = meta_pb.loc[keep].copy().reset_index(drop=True)
 
@@ -60,11 +60,11 @@ def make_pseudobulk(
         out_dir.mkdir(parents=True, exist_ok=True)
         pb_df = pd.DataFrame(
             pb,
-            index=meta_pb["sample_id"],
+            index=meta_pb['sample_id'],
             columns=adata.raw.var_names
         )
-        pb_df.to_csv(out_dir / counts_name, sep="\t")
-        meta_pb.to_csv(out_dir / meta_name, sep="\t", index=False)
+        pb_df.to_csv(out_dir / counts_name, sep='\t')
+        meta_pb.to_csv(out_dir / meta_name, sep='\t', index=False)
 
     if return_pb:
         return pb_df, meta_pb
