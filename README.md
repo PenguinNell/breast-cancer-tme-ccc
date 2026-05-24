@@ -17,9 +17,7 @@ The main limitation of `genefu` in this setting is that its PAM50 reference cent
 
 #### Analysis notebook
 
-The first part of the analysis is available here:
-
-- [Subtype classification notebook](notebooks/01_breast_cancer_subtype_classification.ipynb)
+The first part of the analysis is available here: [Subtype classification notebook](notebooks/01_breast_cancer_subtype_classification.ipynb)
 
 #### What is done in this notebook
 
@@ -56,8 +54,7 @@ This notebook prepares the breast cancer scRNA-seq atlas for downstream **LIANA 
 
 #### Analysis notebook
 
-The preparation step is available here:
-- [CCC data preparation notebook](notebooks/02a_prep_data_pam50_for_liana.ipynb)
+The preparation step is available here: [CCC data preparation notebook](notebooks/02a_prep_data_pam50_for_liana.ipynb)
 
 #### What is done in this notebook
 
@@ -107,8 +104,7 @@ The workflow focuses specifically on **tumor-microenvironment crosstalk**, restr
 
 #### Analysis notebook
 
-The second part of the analysis is available here:
-- [Cell-cell communication notebook](notebooks/02b_cell_cell_communication_analysis.ipynb)
+The second part of the analysis is available here: [Cell-cell communication notebook](notebooks/02b_cell_cell_communication_analysis.ipynb)
 
 #### What is done in this notebook
 
