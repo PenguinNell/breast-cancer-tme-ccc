@@ -252,7 +252,6 @@ Key R packages used across the project:
 | limma | 3.68.3 |
 | GSEABase | 1.74.0 |
 | pheatmap | 1.0.13 |
-| DT | 0.34.0 |
 | gridExtra | 2.3 |
 | patchwork | 1.3.2 |
 | tidyverse | 2.0.0 |

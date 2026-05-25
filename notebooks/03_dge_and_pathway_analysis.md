@@ -26,7 +26,6 @@ Differential expression and pathway analysis across PAM50 subtypes
 ``` r
 cran_packages <- c(
   'pheatmap',
-  'DT',
   'gridExtra',
   'patchwork',
   'tidyverse'
@@ -58,7 +57,6 @@ for (pkg in bioc_packages[bioc_packages != 'BiocManager']) {
 library(edgeR)
 library(limma)
 library(pheatmap)
-library(DT)
 library(gridExtra)
 library(grid)
 library(GSEABase)
@@ -137,11 +135,27 @@ donors_per_cell_type <- samples_meta %>%
     values_fill = '0 (0%)'
   )
 
-datatable(donors_per_cell_type, options = list(paging = FALSE))
+knitr::kable(donors_per_cell_type, format = "pipe", align = "l")
 ```
 
-<div class="datatables html-widget html-fill-item" id="htmlwidget-d60cf1d78ea8a0010385" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-d60cf1d78ea8a0010385">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["B_memory","CD4_Tconv","CD8_T","Dendritic_cell","Endothelial","Exhausted_T","Fibroblast_Stromal","Macrophage","Malignant cell","Mast","Mural","NK","Naive_T","Plasma","Tfh","Treg"],["17 (55%)","17 (55%)","20 (65%)","28 (90%)","20 (65%)","20 (65%)","26 (84%)","30 (97%)","31 (100%)","2 (6%)","15 (48%)","22 (71%)","19 (61%)","18 (58%)","18 (58%)","23 (74%)"],["13 (62%)","15 (71%)","17 (81%)","11 (52%)","15 (71%)","10 (48%)","19 (90%)","20 (95%)","21 (100%)","4 (19%)","14 (67%)","16 (76%)","15 (71%)","14 (67%)","12 (57%)","19 (90%)"],["24 (71%)","31 (91%)","29 (85%)","27 (79%)","31 (91%)","12 (35%)","33 (97%)","33 (97%)","34 (100%)","13 (38%)","26 (76%)","29 (85%)","25 (74%)","20 (59%)","13 (38%)","28 (82%)"],["21 (60%)","22 (63%)","28 (80%)","25 (71%)","33 (94%)","17 (49%)","35 (100%)","35 (100%)","35 (100%)","13 (37%)","22 (63%)","26 (74%)","26 (74%)","21 (60%)","20 (57%)","26 (74%)"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cell_type_major<\/th>\n      <th>Basal<\/th>\n      <th>ERBB2<\/th>\n      <th>LumA<\/th>\n      <th>LumB<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"cell_type_major","targets":1},{"name":"Basal","targets":2},{"name":"ERBB2","targets":3},{"name":"LumA","targets":4},{"name":"LumB","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+| cell_type_major    | Basal     | ERBB2     | LumA      | LumB      |
+|:-------------------|:----------|:----------|:----------|:----------|
+| B_memory           | 17 (55%)  | 13 (62%)  | 24 (71%)  | 21 (60%)  |
+| CD4_Tconv          | 17 (55%)  | 15 (71%)  | 31 (91%)  | 22 (63%)  |
+| CD8_T              | 20 (65%)  | 17 (81%)  | 29 (85%)  | 28 (80%)  |
+| Dendritic_cell     | 28 (90%)  | 11 (52%)  | 27 (79%)  | 25 (71%)  |
+| Endothelial        | 20 (65%)  | 15 (71%)  | 31 (91%)  | 33 (94%)  |
+| Exhausted_T        | 20 (65%)  | 10 (48%)  | 12 (35%)  | 17 (49%)  |
+| Fibroblast_Stromal | 26 (84%)  | 19 (90%)  | 33 (97%)  | 35 (100%) |
+| Macrophage         | 30 (97%)  | 20 (95%)  | 33 (97%)  | 35 (100%) |
+| Malignant cell     | 31 (100%) | 21 (100%) | 34 (100%) | 35 (100%) |
+| Mast               | 2 (6%)    | 4 (19%)   | 13 (38%)  | 13 (37%)  |
+| Mural              | 15 (48%)  | 14 (67%)  | 26 (76%)  | 22 (63%)  |
+| NK                 | 22 (71%)  | 16 (76%)  | 29 (85%)  | 26 (74%)  |
+| Naive_T            | 19 (61%)  | 15 (71%)  | 25 (74%)  | 26 (74%)  |
+| Plasma             | 18 (58%)  | 14 (67%)  | 20 (59%)  | 21 (60%)  |
+| Tfh                | 18 (58%)  | 12 (57%)  | 13 (38%)  | 20 (57%)  |
+| Treg               | 23 (74%)  | 19 (90%)  | 28 (82%)  | 26 (74%)  |
 
 Only Mast cells have insufficient coverage and are excluded from
 downstream analysis.
@@ -272,11 +286,26 @@ deg_summary <- bind_rows(lapply(names(deg_results), function(ct) {
 })) %>%
   arrange(desc(n_genes_fdr_0.005))
 
-datatable(deg_summary, options = list(paging = FALSE))
+knitr::kable(deg_summary, format = "pipe", align = "l")
 ```
 
-<div class="datatables html-widget html-fill-item" id="htmlwidget-ffedf4095195ca34da27" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ffedf4095195ca34da27">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],["Malignant cell","Fibroblast_Stromal","Mural","Macrophage","CD4_Tconv","Endothelial","Treg","NK","Tfh","CD8_T","Exhausted_T","B_memory","Plasma","Dendritic_cell","Naive_T"],[6690,616,443,406,156,144,140,78,70,49,47,36,25,23,13],[7406,803,629,509,240,252,192,114,117,77,71,46,35,43,15],[9493,1648,1355,904,606,734,463,294,298,206,200,101,70,112,57],["MOXD1, MARCO, DLX5, PRSS12, HORMAD1","IGHG4, ZNF90, RRM2, SCN7A, UPP1","TIMP1, ADAMTS14, TSPAN15, IBSP, ADAMTS2","MT1F, MT1H, AGR3, ANKRD30A, CXCL5","AGR2, SCGB2A2, ENDOG, RBM38, CDV3","MFAP5, IGHM, PLEK2, MUCL1, ERBB2","CSTF1, FLCN, AGR2, NR2C2AP, TRPV2","MUCL1, CDV3, RABGGTA, AKT1, ARL4C","MUCL1, GPR25, TRAV38.2DV8, CDV3, EPC2","AKT1, RABGGTA, DCAF10, RABL6, NGRN","ENDOD1, MUCL1, ABCC1, MAPKAP1, SCGB2A2","ENDOD1, AGR2, FLCN, CBFA2T3, PRKAB1","CTCF, MFGE8, IGKV3.7, RBM23, ANKRD30A","MMP12, MUCL1, HBB, PPM1N, AGR2","MAPRE1, ILK, CXCL13, NGRN, ATXN10"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cell_type<\/th>\n      <th>n_genes_fdr_0.005<\/th>\n      <th>n_genes_fdr_0.01<\/th>\n      <th>n_genes_fdr_0.05<\/th>\n      <th>top5_genes<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"cell_type","targets":1},{"name":"n_genes_fdr_0.005","targets":2},{"name":"n_genes_fdr_0.01","targets":3},{"name":"n_genes_fdr_0.05","targets":4},{"name":"top5_genes","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+| cell_type | n_genes_fdr_0.005 | n_genes_fdr_0.01 | n_genes_fdr_0.05 | top5_genes |
+|:---|:---|:---|:---|:---|
+| Malignant cell | 6690 | 7406 | 9493 | MOXD1, MARCO, DLX5, PRSS12, HORMAD1 |
+| Fibroblast_Stromal | 616 | 803 | 1648 | IGHG4, ZNF90, RRM2, SCN7A, UPP1 |
+| Mural | 443 | 629 | 1355 | TIMP1, ADAMTS14, TSPAN15, IBSP, ADAMTS2 |
+| Macrophage | 406 | 509 | 904 | MT1F, MT1H, AGR3, ANKRD30A, CXCL5 |
+| CD4_Tconv | 156 | 240 | 606 | AGR2, SCGB2A2, ENDOG, RBM38, CDV3 |
+| Endothelial | 144 | 252 | 734 | MFAP5, IGHM, PLEK2, MUCL1, ERBB2 |
+| Treg | 140 | 192 | 463 | CSTF1, FLCN, AGR2, NR2C2AP, TRPV2 |
+| NK | 78 | 114 | 294 | MUCL1, CDV3, RABGGTA, AKT1, ARL4C |
+| Tfh | 70 | 117 | 298 | MUCL1, GPR25, TRAV38.2DV8, CDV3, EPC2 |
+| CD8_T | 49 | 77 | 206 | AKT1, RABGGTA, DCAF10, RABL6, NGRN |
+| Exhausted_T | 47 | 71 | 200 | ENDOD1, MUCL1, ABCC1, MAPKAP1, SCGB2A2 |
+| B_memory | 36 | 46 | 101 | ENDOD1, AGR2, FLCN, CBFA2T3, PRKAB1 |
+| Plasma | 25 | 35 | 70 | CTCF, MFGE8, IGKV3.7, RBM23, ANKRD30A |
+| Dendritic_cell | 23 | 43 | 112 | MMP12, MUCL1, HBB, PPM1N, AGR2 |
+| Naive_T | 13 | 15 | 57 | MAPRE1, ILK, CXCL13, NGRN, ATXN10 |
 
 ### Generate heatmaps of top differentially expressed genes
 
@@ -406,6 +435,7 @@ grid.arrange(grobs = heatmap_grobs, nrow = 2, ncol = 4)
 ```
 
 <img src="03_dge_and_pathway_analysis_files/figure-gfm/tensor-score-heatmaps-1.png" alt="" style="display: block; margin: auto;" />
+
 Across these cell types, expression follows a broad gradient from
 Basal/ERBB2 toward Luminal subtypes, consistent with the CCC result
 where the dominant communication program is strongest in Basal and ERBB2
@@ -708,11 +738,25 @@ pathway_test_summary <- bind_rows(summary_rows) %>%
   select(cell_type, program, n_genes, subtype_FDR, batch_FDR) %>%
   arrange(subtype_FDR)
 
-datatable(pathway_test_summary, options = list(paging = FALSE))
+knitr::kable(pathway_test_summary, format = "pipe", align = "l")
 ```
 
-<div class="datatables html-widget html-fill-item" id="htmlwidget-934030794552b8ea114c" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-934030794552b8ea114c">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14"],["Malignant cell","Macrophage","Malignant cell","Macrophage","Dendritic_cell","Treg","NK","Dendritic_cell","NK","Macrophage","Treg","NK","Dendritic_cell","Treg"],["stromal","infl_myel","inflammatory","adhes","adhes","infl_nk_t","infl_nk_t","infl_myel","adhes","homing","homing","homing","homing","adhes"],[357,614,749,193,133,444,356,525,93,232,149,108,184,115],["0.0005","0.0190","0.0336","0.0706","0.0706","0.0706","0.0706","0.0870","0.3944","0.4158","0.4255","0.6325","0.6474","0.6474"],["1.05e-06","7.04e-08","3.43e-07","3.60e-05","4.89e-07","8.99e-10","9.20e-09","7.04e-08","1.34e-05","8.99e-10","2.66e-09","9.58e-09","1.37e-09","3.10e-06"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cell_type<\/th>\n      <th>program<\/th>\n      <th>n_genes<\/th>\n      <th>subtype_FDR<\/th>\n      <th>batch_FDR<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"cell_type","targets":1},{"name":"program","targets":2},{"name":"n_genes","targets":3},{"name":"subtype_FDR","targets":4},{"name":"batch_FDR","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+| cell_type      | program      | n_genes | subtype_FDR | batch_FDR |
+|:---------------|:-------------|:--------|:------------|:----------|
+| Malignant cell | stromal      | 357     | 0.0005      | 1.05e-06  |
+| Macrophage     | infl_myel    | 614     | 0.0190      | 7.04e-08  |
+| Malignant cell | inflammatory | 749     | 0.0336      | 3.43e-07  |
+| Macrophage     | adhes        | 193     | 0.0706      | 3.60e-05  |
+| Dendritic_cell | adhes        | 133     | 0.0706      | 4.89e-07  |
+| Treg           | infl_nk_t    | 444     | 0.0706      | 8.99e-10  |
+| NK             | infl_nk_t    | 356     | 0.0706      | 9.20e-09  |
+| Dendritic_cell | infl_myel    | 525     | 0.0870      | 7.04e-08  |
+| NK             | adhes        | 93      | 0.3944      | 1.34e-05  |
+| Macrophage     | homing       | 232     | 0.4158      | 8.99e-10  |
+| Treg           | homing       | 149     | 0.4255      | 2.66e-09  |
+| NK             | homing       | 108     | 0.6325      | 9.58e-09  |
+| Dendritic_cell | homing       | 184     | 0.6474      | 1.37e-09  |
+| Treg           | adhes        | 115     | 0.6474      | 3.10e-06  |
 
 Significant subtype-associated pathway differences are detected only in
 malignant cells and macrophages.
