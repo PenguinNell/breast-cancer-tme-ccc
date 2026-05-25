@@ -3,6 +3,15 @@
 
 
 
+## Project goals and objectives
+
+The project explores subtype-specific features of the **breast cancer tumor microenvironment** using single-cell RNA-seq data. Its main aim is to determine whether **PAM50 breast cancer subtypes** differ not only in tumor-cell state, but also in tumor-microenvironment communication.
+
+The analysis includes four key tasks:
+- donor-level subtype assignment from tumor-cell pseudobulks;
+- preparation of the single-cell atlas for communication analysis;
+- inference of subtype-associated ligand-receptor programs with **LIANA + Tensor-cell2cell**;
+- expression- and pathway-level validation using cell-type-specific pseudobulks.
 
 ## Results
 
