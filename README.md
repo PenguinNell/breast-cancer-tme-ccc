@@ -158,7 +158,7 @@ The communication gradient identified by LIANA + Tensor-cell2cell is supported b
 **Source:**
 More details on differential expression and pathway analysis can be found here: 
 - [raw R Markdown](notebooks/03_dge_and_pathway_analysis.Rmd)
-- [rendered HTML report](notebooks/03_dge_and_pathway_analysis.html)
+- [rendered report](notebooks/03_dge_and_pathway_analysis.md)
 
 ## Conclusions
 
