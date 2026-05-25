@@ -1,3 +1,13 @@
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+for (pkg in c("edgeR", "genefu")) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    BiocManager::install(pkg, ask = FALSE, update = FALSE)
+  }
+}
+
 invisible(capture.output(
   suppressPackageStartupMessages(suppressWarnings({
     library(edgeR)
