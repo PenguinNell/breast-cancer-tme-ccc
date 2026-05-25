@@ -156,7 +156,9 @@ These findings are consistent with the dominant CCC program, which linked a **st
 The communication gradient identified by LIANA + Tensor-cell2cell is supported by independent expression- and pathway-level evidence, suggesting that PAM50 subtypes differ in both tumor state and tumor-microenvironment interaction programs.
 
 **Source:**
-More details can be found here: [Differential expression and pathway analysis](notebooks/03_dge_and_pathway_analysis.Rmd)
+More details on differential expression and pathway analysis can be found here: 
+- [raw R Markdown](notebooks/03_dge_and_pathway_analysis.Rmd)
+- [rendered HTML report](notebooks/03_dge_and_pathway_analysis.html)
 
 ## Conclusions
 
