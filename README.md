@@ -6,209 +6,97 @@
 
 ## Results
 
-### Part 1: Breast cancer subtype classification using tumor-cell pseudobulks
+### Part 1. Breast cancer subtype classification from tumor-cell pseudobulks
 
-The goal is to compare two subtype assignment strategies:
+**What for:**  
+This step assigns PAM50 subtypes to donors and compares a standard PAM50 classifier with an RNA-seq-oriented alternative better suited to pseudobulk expression profiles.
 
-- **PAM50 classification with `genefu`**, the standard approach;
-- a **custom RNA-seq-oriented classifier** based on sequential hierarchical clustering with published subtype-discriminative gene panels.
+**Pipeline:**  
+Malignant cells were extracted from the atlas and aggregated into donor-level tumor pseudobulks. After TMM + logCPM normalization, subtypes were assigned in two ways: (1) PAM50 classification with `genefu`, and (2) a custom clustering-based workflow using published subtype-discriminative gene panels to separate Basal, ERBB2, LumA, and LumB tumors.
 
-The main limitation of `genefu` in this setting is that its PAM50 reference centroids were derived from **microarray** data, whereas this project uses **RNA-seq** data.
-
-#### Analysis notebook
-
-The first part of the analysis is available here: [Subtype classification notebook](notebooks/01_breast_cancer_subtype_classification.ipynb)
-
-#### What is done in this notebook
-
-- malignant cells are extracted from the full dataset;
-- donor-level tumor pseudobulks are constructed;
-- pseudobulks are normalized with **TMM + logCPM**;
-- donor samples are classified with **`genefu` PAM50**;
-- an alternative classifier is built using published genes from a sequence of binary boosted trees;
-- these gene panels are used in a **series of agglomerative clustering steps**:
-  - Basal vs rest
-  - ERBB2 vs rest
-  - LumB vs LumA
-
-#### Main result
-
-The custom clustering-based workflow produces a four-class solution:
-
-- **Basal**: 32
-- **ERBB2**: 22
-- **LumA**: 35
-- **LumB**: 36
-
-Overall, the clustering-based labels show strong agreement with `genefu` for the **Basal-like** group, moderate agreement for **ERBB2+**, and a less stable split between **Luminal A** and **Luminal B**. This is expected, since Luminal A and Luminal B are biologically closer. 
-
-At the same time, the heatmap suggests that the clustering-based approach separates luminal samples more clearly than `genefu` does.
-
-#### Comparison with `genefu`
+**Results:**  
+The custom workflow produced a four-class solution across donors: **Basal-like (32), ERBB2+ (22), Luminal A (35), Luminal B (36)**.  
+Agreement with `genefu` was strongest for **Basal-like**, moderate for **ERBB2+**, and less stable for the **Luminal A / Luminal B** split, which is expected given their biological similarity. At the same time, the clustering-based approach gave a clearer separation of luminal samples in the expression heatmap.
 
 ![Clustering vs genefu confusion matrix](imgs/clustering.png)
 
-### Part 2a: Data preparation for cell-cell communication analysis
+**Takeaway:**  
+Subtype labels were robust enough for downstream analysis, and the custom RNA-seq-oriented approach provided a biologically interpretable alternative to microarray-based PAM50 classification.
 
-The goal of this step is to prepare the breast cancer scRNA-seq atlas for downstream **LIANA + Tensor-cell2cell** analysis and to generate **cell-type-specific pseudobulks** for subsequent **edgeR-based validation**.
+**Notebook:**
+More details can be found here: [Subtype classification notebook](notebooks/01_breast_cancer_subtype_classification.ipynb)
 
+### Part 2. Tumor–microenvironment communication across PAM50 subtypes
 
-#### Analysis notebook
+**What for:**  
+This part tests whether breast cancer subtypes differ not only in tumor-cell state, but also in how tumor and microenvironment compartments communicate.
 
-The preparation step is available here: [CCC data preparation notebook](notebooks/02a_prep_data_pam50_for_liana.ipynb)
+**Pipeline:**  
+After filtering donors and merging cell annotations into major cell types, subtype labels were mapped back to single cells and the dataset was prepared for communication analysis. Donor-level ligand-receptor interactions were inferred with **LIANA**, restricted to **tumor -> TME** and **TME -> tumor** signaling, and then decomposed with **Tensor-cell2cell** to identify shared communication programs across donors. In parallel, cell-type-specific donor pseudobulks were generated for later expression-based validation.
 
-#### What is done in this notebook
+**Results:**  
+After filtering, **121 of 138 donors** were retained. Subtype-dependent differences in TME composition were detected in **9 of 15** non-malignant major cell types, indicating that PAM50 subtypes differ not only transcriptionally, but also in microenvironment structure.
 
-- the breast cancer atlas is filtered to retain donors with sufficient **tumor** and **non-tumor** cell counts;
-- **PAM50 subtype labels** from Part 1 are mapped to donor cells;
-- subtype structure is inspected on UMAPs to check for **batch effects** and **donor-specific tumor states**;
-- fine cell annotations are collapsed into **16 major cell types** for communication analysis;
-- subtype differences in **major cell type composition** are tested;
-- the expression matrix is reformatted to keep only **HGNC-mapped genes** and collapse duplicated symbols;
-- filtered AnnData objects are prepared for **LIANA**;
-- **cell-type-specific donor pseudobulks** are generated for downstream **edgeR differential expression** and validation of the **LIANA + Tensor-cell2cell** results.
-
-#### Main result
-
-1. After filtering, **121 of 138 donors** were retained for downstream analysis. The subtype labels are well distributed across donors and batches.
-
-2. The original atlas contained **29 cell types**, many of them represented by very small numbers of cells per donor.  
-For the communication analysis, these were collapsed into **16 major groups**.
-
-3. TME composition differences across PAM50 subtypes: significant subtype-dependent differences were detected for **9 of 15 non-malignant major cell types**. This indicates that PAM50 subtypes differ not only in tumor-cell expression states, but also in their TME composition.
-
-4. Preparation of HGNC-compatible gene annotations  
-Because LIANA expects **HGNC symbols**, the expression matrix was reformatted:
-    - genes lacking HGNC symbols were removed;
-    - duplicated HGNC entries were collapsed by retaining the gene with the highest total expression.
-
-    The resulting filtered objects were saved to disk and will be used as input for the downstream LIANA + Tensor-cell2cell analysis in Part 2b.
-
-5. In addition, donor-level pseudobulks separated by cell type were generated.
-
-    These pseudobulks are intended for:
-    - downstream differential expression analysis with **edgeR**;
-    - validation of subtype-associated communication patterns detected by **LIANA + Tensor-cell2cell**;
-    - follow-up testing of whether ligand-, receptor-, or pathway-related signals highlighted in the communication analysis are also reflected at the expression level within specific cell compartments.
-
-### Part 2b: Cell-cell communication analysis across PAM50 breast cancer subtypes
-
-The goal of this part is to identify **cell-cell communication programs** associated with breast cancer PAM50 subtypes and to determine which cell types and ligand-receptor interactions contribute most strongly to these subtype-specific patterns.
-
-This analysis combines:
-- **LIANA**, to infer donor-level ligand-receptor interactions;
-- **Tensor-cell2cell**, to decompose these interactions into latent communication programs shared across donors.
-
-The workflow focuses specifically on **tumor-microenvironment crosstalk** and restricts the analysis to:
-
-- **tumor -> TME**
-- **TME -> tumor**
-
-#### Analysis notebook
-
-The second part of the analysis is available here: [Cell-cell communication notebook](notebooks/02b_cell_cell_communication_analysis.ipynb)
-
-#### What is done in this notebook
-
-- donor-level cell-cell communication is inferred with **LIANA** using the `consensus` resource;
-- interactions are retained only if they are present within each PAM50 subtype in at least 40% of donors;
-- the analysis is restricted to tumor-TME interactions;
-- LIANA results are converted into a 4D tensor:
-  - donors (context)
-  - ligand-receptor pairs
-  - sender cell types
-  - receiver cell types
-- the tensor is decomposed with **Tensor-cell2cell** to identify latent communication factors;
-- donor factor loadings are compared across PAM50 subtypes;
-- factor-derived scores are assigned back to individual LIANA interactions;
-- interactions are additionally filtered using **CellChatDB** to keep curated and pathway-annotated pairs;
-- subtype differences are analyzed separately for:
-  - **TME -> Tumor**
-  - **Tumor -> TME**
-
-#### Main result
-
-Tensor-cell2cell identified **one dominant communication factor**, suggesting that the main variation in tumor-TME signaling can be captured by a single latent program.
-
-This program differs significantly across PAM50 subtypes:
-- it is **strongest in Basal-like**
-- also enriched in **ERBB2+**
-- weaker in **Luminal A** and **Luminal B**
+Tensor-cell2cell identified **one dominant communication program** that captured most subtype-related variation. This factor was strongest in **Basal-like**, elevated in **ERBB2+**, and weaker in **Luminal A/B** tumors. The same trend remained significant after restricting to curated interactions.
 
 ![Tensor score across subtypes](imgs/tensor_score_by_subtypes.png)
 
-After filtering to curated interactions, the same subtype trend remains significant for both TME -> Tumor and Tumor -> TME signaling.
+Biologically, the program combined:
+- a **stromal-to-tumor axis** involving Fibroblast/Stromal, Endothelial, and Mural cells;
+- a **tumor-to-immune axis** involving signaling toward Macrophages, Dendritic cells, Treg, and NK cells.
 
-#### Biological interpretation
-
-The inferred factor combines two major components:
-- a **stromal-to-tumor axis**, dominated by Fibroblast/Stromal, Endothelial, and Mural cells;
-- a **tumor-to-immune axis**, dominated by malignant cell signaling toward Macrophage, Dendritic_cell, Treg, NK.
+Top interactions included **COL1A1/COL1A2 → CD44**, **FN1 → CD44**, and **MIF → CD74/CXCR4**.
 
 ![Communication scheme](imgs/communication_scheme.png)
 
-**Top LR-interactions:**
-| TME -> Tumor (Stromal) | Tumor -> TME (Immune) |
-|---|---|
-| COL1A1 / COL1A2 -> CD44 | MIF -> CD74_CXCR4 |
-| FN1 -> CD44 | MIF -> CD44_CD74 |
-| APP -> CD74 | APP -> CD74 |
+**Takeaway:**  
+Breast cancer subtypes differ along a major tumor-TME communication gradient, with stronger stromal remodeling and immune-modulatory signaling in the more aggressive **Basal-like** and **ERBB2+** tumors.
 
-Overall, the results point to a communication program combining **stromal remodeling** and **immune-modulatory signaling**, with higher activity in the more aggressive **Basal-like** and **ERBB2+** tumors and lower activity in the **Luminal** subtypes.
+**Notebook:**
+This part was divided into two steps: data preparation and cell-cell communication analysis. Details can be found here:
+- [CCC data preparation notebook](notebooks/02a_prep_data_pam50_for_liana.ipynb)
+- [Cell-cell communication notebook](notebooks/02b_cell_cell_communication_analysis.ipynb)
 
-### CCC pipeline
+### Part 3. Expression-level validation of subtype-associated communication patterns
 
-This repository includes a standalone **LIANA + Tensor-cell2cell** CLI pipeline (`ccc_pipeline.py`) for reproducible cell-cell communication analysis from an annotated `.h5ad` object.
+**What for:**  
+This step evaluates whether the communication patterns identified in Part 2 are also reflected in donor-level expression changes within specific cell compartments.
 
-The pipeline is designed for studying communication programs in the **tumor microenvironment (TME)**, with explicit support for separating **tumor** and **non-tumor** cell compartments.
+**Pipeline.**  
+Cell-type-specific donor pseudobulks were analyzed in **R** using **edgeR** for differential expression across PAM50 subtypes. In addition, receptor-centered **Reactome** pathway scores were computed to test whether signaling programs highlighted by the CCC analysis were also altered at the transcriptional level.
 
-#### Why use it
+**Results:**  
+Subtype-associated expression differences were detected not only in malignant cells, but also in several TME compartments. In the cell types most strongly involved in the communication signal, the same broad pattern was observed as in Part 2: expression programs were generally higher in **Basal-like** and **ERBB2+** tumors and lower in **Luminal** subtypes.
 
-The pipeline was designed to make CCC analysis easy to rerun with different:
+Pathway analysis provided targeted support for this result. Significant subtype-associated differences were detected in:
+- **Malignant cells**: stromal and inflammatory programs;
+- **Macrophages**: inflammatory program.
 
-- LIANA filtering parameters,
-- subtype recurrence thresholds,
-- tumor/non-tumor interaction constraints,
-- CPU/GPU settings.
+These findings are consistent with the dominant CCC program, which linked a **stromal TME -> tumor axis** with a **tumor -> immune axis**.
 
-#### Input
+![DGE heatmaps](imgs/dge.png)
 
-The script expects an annotated single-cell `h5ad` object with:
+**Takeaway:**  
+The communication gradient identified by LIANA + Tensor-cell2cell is supported by independent expression- and pathway-level evidence, suggesting that PAM50 subtypes differ in both tumor state and tumor-microenvironment interaction programs.
 
-- a donor/sample column,
-- a cell type annotation column,
-- a subtype annotation column.
+## Reproducible CCC pipeline
 
-#### Workflow
+This repository includes a standalone CLI pipeline, `ccc_pipeline.py`, for reproducible **LIANA + Tensor-cell2cell** analysis from an annotated `.h5ad` object.
 
-Starting from the input `h5ad`, the pipeline:
+The pipeline runs donor-level **LIANA** inference, applies subtype-aware recurrence filtering, restricts interactions by communication direction, builds a 4D communication tensor, and performs **Tensor-cell2cell** decomposition. It is designed for flexible re-analysis of tumor microenvironment communication under different filtering settings.
 
-1. loads the dataset;
-2. runs **LIANA** separately for each donor/sample using the **consensus** resource;
-3. adds subtype metadata to donor-level LIANA results;
-4. applies subtype-level recurrence filtering across donors;
-5. filters interactions by communication direction;
-6. builds a 4D communication tensor;
-7. runs **Tensor-cell2cell** decomposition with elbow-based rank selection;
-8. saves all main outputs to disk.
+**Input requirements:**
+- donor/sample annotation
+- cell type annotation
+- subtype annotation
 
-#### Interaction modes
-
-The `--interaction-mode` argument controls which communication directions are retained:
-
+**Supported interaction modes:**
 - `tt` - tumor -> tumor
 - `t_nt` - tumor -> non-tumor
 - `nt_t` - non-tumor -> tumor
 - `nt_nt` - non-tumor -> non-tumor
 
-Multiple modes can be combined, for example:
-
-```bash
---interaction-mode 't_nt,nt_t'
-```
-
-#### Example run
-
+**Example**
 ```bash
 python ccc_pipeline.py \
     --adata-path ../data/data_hgnc.h5ad \
@@ -224,98 +112,10 @@ python ccc_pipeline.py \
     --use-gpu
 ```
 
-#### Main CLI arguments
-
-**Input / output**
-- `--adata-path` - path to the input `.h5ad` file
-- `--outdir` - directory for all output files
-
-**LIANA parameters**
-- `--min-cells` - minimum number of cells per cell type
-- `--expr-prop` - minimum expression proportion threshold
-
-**Metadata columns**
-- `--subtype-col` - subtype label column
-- `--sample-col` - donor/sample identifier column
-- `--celltype-col` - cell type annotation column
-- `--tumor-label` - label used to define tumor cells
-
-**Filtering**
-- `--min-donors-prop` - minimum donor proportion within each subtype required to retain an interaction
-- `--interaction-mode` - interaction classes to retain
-
-**Hardware**
-- `--use-gpu` / `--no-use-gpu` - whether to run tensor decomposition on GPU if available
+All main intermediate and final outputs are saved to the specified output directory.  
 
 For the full list of options:
-
 ```bash
 python ccc_pipeline.py --help
 ```
 
-#### Output
-
-The pipeline writes multiple intermediate and final files to the output directory, including:
-
-- full LIANA results;
-- LIANA results after subtype recurrence filtering;
-- LIANA results after interaction-direction filtering;
-- serialized **tensor** object;
-- serialized **tensor metadata** object.
-
-Output file names automatically include the parameter settings used in the run, making it easier to track and compare analyses.
-
-### Part 3: Differential expression and pathway analysis across PAM50 subtypes
-
-This part of the analysis was performed entirely in **R**.
-
-The goal is to test whether the subtype-associated communication patterns identified in Part 2 are also reflected in donor-level gene expression within specific cell compartments.
-
-This step combines:
-- **edgeR**, to test differential expression across PAM50 subtypes within each major cell type;
-- **Reactome-based pathway scoring**, to evaluate whether receptor-linked signaling programs differ across subtypes in the relevant target cells.
-
-#### Analysis file
-
-The third part of the analysis is available here: [Differential expression and pathway analysis](notebooks/03_deg_and_pathway_analysis.Rmd)
-
-#### What is done in this notebook
-- donor-level cell-type-specific pseudobulks from Part 2a are loaded;
-- cell types with insufficient donor coverage are excluded;
-- differential expression across PAM50 subtypes is tested for each major cell type;
-- top subtype-associated genes are visualized as heatmaps;
-- the analysis focuses on cell types contributing most strongly to the CCC signal;
-- receptor-centered Reactome pathway programs are scored and compared across PAM50 subtypes with batch correction;
-- for each pathway, the score is calculated as the mean gene-wise z-scored logCPM across genes in the selected set, giving one score per donor × cell type sample.
-
-#### Main result
-
-Differential expression shows that PAM50-associated transcriptional differences are present not only in malignant cells, but also in several TME compartments.
-
-In the cell types most strongly involved in the CCC signal, expression follows the same broad trend as in Part 2:
-
-- higher in **Basal-like** and **ERBB2+**
-- lower in **Luminal** subtypes
-
-This supports the idea that the communication gradient identified by **LIANA + Tensor-cell2cell** is also reflected at the expression level.
-
-![DGE heatmaps](imgs/dge.png)
-
-#### Pathway-level interpretation
-
-The pathway analysis was designed as a targeted validation of the CCC results.
-
-Among the tested target populations, significant subtype-associated pathway differences were detected in:
-
-- **Malignant cell**:
-  - stromal program
-  - inflammatory program
-- **Macrophage**:
-  - inflammatory program
-
-This is consistent with the communication analysis, where the dominant program combined:
-
-- a **stromal TME -> Tumor axis**
-- a **tumor -> immune axis**
-
-Overall, the third part provides expression-level support for the main finding: PAM50 subtypes differ not only in tumor-cell state, but also in the structure of tumor-microenvironment communication.
