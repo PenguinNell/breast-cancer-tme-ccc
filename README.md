@@ -5,6 +5,8 @@
 > tg: *@PenguinNell* </br>
 > ansycheva26@gmail.com
 
+This repository contains my bioinformatics project for the Professional Retraining Program "Bioinformatics for Biologists" at the Bioinformatics Institute (2025–2026).
+
 **Supervisor**: Ivan Valiev
 
 ---
