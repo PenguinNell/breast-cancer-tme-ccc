@@ -265,19 +265,34 @@ Required R packages are installed automatically when running the analysis files:
 ## References
 
 ### Bibliography
-1.	P. Turova et al., “The Breast Cancer Classifier refines molecular breast cancer classification to delineate the HER2-low subtype,” npj Breast Cancer, vol. 11, no. 1, p. 19, Feb. 2025.
-2.	H. M. Baghdassarian, D. Dimitrov, E. Armingol, J. Saez-Rodriguez, and N. E. Lewis, “Combining LIANA and Tensor-cell2cell to decipher cell-cell communication across multiple samples,” Cell Rep Methods, vol. 4, no. 4, p. 100758, Apr. 2024.
-3. D. Dimitrov et al., “Comparison of methods and resources for cell-cell communication inference from single-cell RNA-Seq data,” Nature Communications, vol. 13, no. 1, p. 3224, Jun. 2022.
-4. E. Armingol et al., “Context-aware deconvolution of cell–cell communication with Tensor-cell2cell,” Nature Communications, vol. 13, no. 1, p. 3665, Jun. 2022.
-5. J. S. Parker et al., “Supervised risk predictor of breast cancer based on intrinsic subtypes,” J Clin Oncol, vol. 27, no. 8, pp. 1160–1167, Mar. 2009.
-6. M. Li et al., “Microenvironment remodeled by tumor and stromal cells elevates fibroblast-derived COL1A1 and facilitates ovarian cancer metastasis,” Exp Cell Res, vol. 394, no. 1, p. 112153, Sep. 2020.
-7. B. Li et al., “Fibronectin 1 promotes melanoma proliferation and metastasis by inhibiting apoptosis and regulating EMT,” Onco Targets Ther, vol. 12, pp. 3207–3221, May 2019.
-8. R. A. Youness et al., “Macrophage migration inhibitory factor (MIF) and the tumor ecosystem: a tale of inflammation, immune escape, and tumor growth,” Front. Immunol., vol. 16, p. 1636839, Oct. 2025.
-9. A. W. Griffioen et al., “CD44 is involved in tumor angiogenesis; an activation antigen on human endothelial cells,” Blood, vol. 90, no. 3, pp. 1150–1159, Aug. 1997.
-10. O. Chen et al., “Modulating tumor-associated macrophages through APP-CD74 blockade with IL4R-exosomes synergizes with PD-1 inhibition in gastric cancer,” NPJ Precis Oncol, Mar. 2026, doi: 10.1038/s41698-025-01268-y.
-11. S. Z. Wu et al., “A single-cell and spatially resolved atlas of human breast cancers,” Nature Genetics, vol. 53, no. 9, pp. 1334–1347, Sep. 2021.
-12. N. Harbeck et al., “Breast cancer,” Nature Reviews Disease Primers, vol. 5, no. 1, p. 66, Sep. 2019.
-13. S. Jin, M. V. Plikus, and Q. Nie, “CellChat for systematic analysis of cell–cell communication from single-cell transcriptomics,” Nature Protocols, vol. 20, no. 1, pp. 180–219, Sep. 2024.
+
+[1] E. Armingol *et al*., “Context-aware deconvolution of cell–cell communication with Tensor-cell2cell,” *Nat Commun*, vol. 13, no. 1, Jun. 2022, doi: 10.1038/s41467-022-31369-2.
+
+[2] H. M. Baghdassarian, D. Dimitrov, E. Armingol, J. Saez-Rodriguez, and N. E. Lewis, “Combining LIANA and Tensor-cell2cell to decipher cell-cell communication across multiple samples,” *Cell Reports Methods*, vol. 4, no. 4, p. 100758, Apr. 2024, doi: 10.1016/j.crmeth.2024.100758.
+
+[3] A. Chen, L. Kroehling, C. S. Ennis, G. V. Denis, and S. Monti, “A highly resolved integrated single-cell atlas of human breast cancers,” *NAR Genomics and Bioinformatics*, vol. 8, no. 1, Jan. 2026, doi: 10.1093/nargab/lqaf217.
+
+[4] O. Chen *et al*., “Modulating tumor-associated macrophages through APP-CD74 blockade with IL4R-exosomes synergizes with PD-1 inhibition in gastric cancer,” *npj Precis. Onc.*, Mar. 2026, doi: 10.1038/s41698-025-01268-y.
+
+[5] D. Dimitrov *et al*., “Comparison of methods and resources for cell-cell communication inference from single-cell RNA-Seq data,” *Nat Commun*, vol. 13, no. 1, Jun. 2022, doi: 10.1038/s41467-022-30755-0.
+
+[6] A. W. Griffioen *et al*., “CD44 Is Involved in Tumor Angiogenesis; an Activation Antigen on Human Endothelial Cells,” *Blood*, vol. 90, no. 3, pp. 1150–1159, Aug. 1997, doi: 10.1182/blood.v90.3.1150.
+
+[7] N. Harbeck *et al*., “Breast cancer,” *Nat Rev Dis Primers*, vol. 5, no. 1, Sep. 2019, doi: 10.1038/s41572-019-0111-2.
+
+[8] S. Jin *et al*., “Inference and analysis of cell-cell communication using CellChat,” *Nat Commun*, vol. 12, no. 1, Feb. 2021, doi: 10.1038/s41467-021-21246-9.
+
+[9] B. Li *et al*., “Fibronectin 1 promotes melanoma proliferation and metastasis by inhibiting apoptosis and regulating EMT,” *OTT*, vol. 12, pp. 3207–3221, May 2019, doi: 10.2147/ott.s195703.
+
+[10] M. Li *et al*., “Microenvironment remodeled by tumor and stromal cells elevates fibroblast-derived COL1A1 and facilitates ovarian cancer metastasis,” *Experimental Cell Research*, vol. 394, no. 1, p. 112153, Sep. 2020, doi: 10.1016/j.yexcr.2020.112153.
+
+[11] T. O. Nielsen *et al*., “A Comparison of PAM50 Intrinsic Subtyping with Immunohistochemistry and Clinical Prognostic Factors in Tamoxifen-Treated Estrogen Receptor–Positive Breast Cancer,” *Clinical Cancer Research*, vol. 16, no. 21, pp. 5222–5232, Oct. 2010, doi: 10.1158/1078-0432.ccr-10-1282.
+
+[12] J. S. Parker *et al*., “Supervised Risk Predictor of Breast Cancer Based on Intrinsic Subtypes,” *JCO*, vol. 27, no. 8, pp. 1160–1167, Mar. 2009, doi: 10.1200/jco.2008.18.1370.
+
+[13] P. Turova *et al*., “The Breast Cancer Classifier refines molecular breast cancer classification to delineate the HER2-low subtype,” *npj Breast Cancer*, vol. 11, no. 1, Feb. 2025, doi: 10.1038/s41523-025-00723-0.
+
+[14] R. A. Youness *et al*., “Macrophage migration inhibitory factor (MIF) and the tumor ecosystem: a tale of inflammation, immune escape, and tumor growth,” *Front. Immunol.*, vol. 16, Oct. 2025, doi: 10.3389/fimmu.2025.1636839.
 
 ### Databases
 
