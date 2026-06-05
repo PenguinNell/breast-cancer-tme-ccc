@@ -210,6 +210,8 @@ python ccc_pipeline.py \
 
 The pipeline saves donor-level LIANA results, filtered interaction tables, tensor objects, and decomposition outputs to the specified output directory.
 
+The tensor-based CCC workflow was run on a server with **128 GB RAM** and an **NVIDIA A100 SXM4 80 GB GPU**.
+
 For the full list of options:
 ```bash
 python ccc_pipeline.py --help
@@ -217,7 +219,14 @@ python ccc_pipeline.py --help
 
 ## Reproducibility and software environment
 
-The project combines **Python** and **R** workflows.
+The project combines **Python** and **R** workflows and was run across two computational environments.
+
+### Computational environments
+
+- **Main analysis server:** 128 GB RAM, CPU-only
+- **CCC server:** 128 GB RAM, NVIDIA A100 SXM4 80 GB GPU
+
+Due to the size of the original dataset (~5 GB `.h5ad`, 621k cells), some memory-intensive steps may be difficult to reproduce on machines with limited RAM.
 
 ### Python environment
 
