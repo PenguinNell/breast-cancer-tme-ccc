@@ -1,13 +1,24 @@
+"""
+LIANA and Tensor-cell2cell pipeline for cell-cell communication analysis.
+
+This module runs donor-level LIANA, applies subtype-level and interaction filters,
+and builds a communication tensor for Tensor-cell2cell.
+"""
+
 import argparse
 import gc
 import pickle
 import warnings
 from pathlib import Path
 
+import pandas as pd
+
 warnings.filterwarnings('ignore')
 
 
-def get_device(use_gpu):
+def get_device(use_gpu: bool) -> str:
+    """Return the compute device."""
+
     if not use_gpu:
         return 'cpu'
 
@@ -20,7 +31,9 @@ def get_device(use_gpu):
     return 'cpu'
 
 
-def parse_interactions(mode):
+def parse_interactions(mode: str) -> set[str]:
+    """Parse interaction-mode string."""
+
     valid_base = {'tt', 't_nt', 'nt_t', 'nt_nt'}
     mode = mode.strip()
 
@@ -40,11 +53,13 @@ def parse_interactions(mode):
 
 
 def make_param_suffix(
-    min_cells,
-    expr_prop,
-    min_donors_prop,
-    interaction_mode_tag,
-):
+        min_cells: int,
+        expr_prop: float,
+        min_donors_prop: float,
+        interaction_mode_tag: str,
+) -> str:
+    """Build the parameter suffix for output files."""
+
     return '__'.join([
         f'mincell_{min_cells}',
         f'exprprop_{str(expr_prop).replace(".", "p")}',
@@ -53,7 +68,13 @@ def make_param_suffix(
     ])
 
 
-def filter_interactions(df, interaction_mode, tumor_label):
+def filter_interactions(
+        df: pd.DataFrame,
+        interaction_mode: set[str],
+        tumor_label: str,
+) -> pd.DataFrame:
+    """Filter interactions by sender and receiver type."""
+
     source_is_tumor = df['source'] == tumor_label
     target_is_tumor = df['target'] == tumor_label
 
@@ -72,19 +93,21 @@ def filter_interactions(df, interaction_mode, tumor_label):
 
 
 def run_liana(
-        adata_path,
-        outdir,
-        min_cells,
-        expr_prop,
-        min_donors_prop,
-        interaction_mode,
-        subtype_col,
-        sample_col,
-        celltype_col,
-        param_suffix,
-        tumor_label,
-        interaction_mode_tag
-    ):
+        adata_path: str | Path,
+        outdir: Path,
+        min_cells: int,
+        expr_prop: float,
+        min_donors_prop: float,
+        interaction_mode: set[str],
+        subtype_col: str,
+        sample_col: str,
+        celltype_col: str,
+        param_suffix: str,
+        tumor_label: str,
+        interaction_mode_tag: str,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Run LIANA and apply post-processing filters."""
+
     import scanpy as sc # too large to load at startup
     import liana as li # too large to load at startup
 
@@ -161,14 +184,16 @@ def run_liana(
 
 
 def run_tensor(
-        liana_res_filt, 
-        context_df, 
-        sample_col, 
-        subtype_col, 
-        outdir, 
-        param_suffix, 
-        device
-    ):
+        liana_res_filt: pd.DataFrame,
+        context_df: pd.DataFrame,
+        sample_col: str,
+        subtype_col: str,
+        outdir: Path,
+        param_suffix: str,
+        device: str,
+) -> None:
+    """Build and decompose the communication tensor."""
+
     import liana as li # too large to load at startup
     import cell2cell as c2c # too large to load at startup
 
@@ -220,18 +245,20 @@ def run_tensor(
 
 
 def run_pipeline(
-    adata_path,
-    outdir='liana_tensor_cell2cell_result',
-    min_cells=5,
-    expr_prop=0.1,
-    min_donors_prop=0.3,
-    tumor_label='malignant cell',
-    subtype_col='subtype',
-    sample_col='sample',
-    celltype_col='celltype',
-    interaction_mode='all',
-    use_gpu=False,
-):
+        adata_path: str | Path,
+        outdir: str | Path = "liana_tensor_cell2cell_result",
+        min_cells: int = 5,
+        expr_prop: float = 0.1,
+        min_donors_prop: float = 0.3,
+        tumor_label: str = "malignant cell",
+        subtype_col: str = "subtype",
+        sample_col: str = "sample",
+        celltype_col: str = "celltype",
+        interaction_mode: str = "all",
+        use_gpu: bool = False,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Run the LIANA and Tensor-cell2cell pipeline."""
+
     outdir = Path(outdir)
     outdir.mkdir(exist_ok=True, parents=True)
 
@@ -283,7 +310,9 @@ def run_pipeline(
     return liana_res, context_df
 
 
-def main():
+def main() -> None:
+    """Parse CLI arguments and run the pipeline."""
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--adata-path', required=True)

@@ -1,11 +1,17 @@
+"""
+Utilities for sequential agglomerative clustering of breast cancer subtypes.
+
+This module evaluates binary target-vs-rest splits against genefu labels
+and returns the best clustering result for each step.
+"""
+
 from dataclasses import dataclass
 
-import numpy as np
-import pandas as pd
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import (
     balanced_accuracy_score,
@@ -17,12 +23,19 @@ from sklearn.metrics import (
 
 @dataclass
 class ClusteringResult:
+    """Result of one target-vs-rest clustering step."""
+
     y_pred_mapped_best: pd.Series
     df_cluster_neg: pd.DataFrame
     genefu_labels_for_non_target: pd.Series
 
 
-def predict_clusters(X, linkage, metric):
+def predict_clusters(
+        X: np.ndarray,
+        linkage: str,
+        metric: str,
+) -> np.ndarray:
+    """Predict two clusters with agglomerative clustering."""
 
     if linkage == 'ward':
         model = AgglomerativeClustering(
@@ -40,14 +53,18 @@ def predict_clusters(X, linkage, metric):
     return model.fit_predict(X)
 
 
-def best_map_labels(y_true, y_pred):
+def best_map_labels(
+        y_true: pd.Series,
+        y_pred: np.ndarray,
+) -> np.ndarray:
+    """Map cluster labels to the reference labels."""
 
     p0, p1 = np.unique(y_pred)
     t0, t1 = np.unique(y_true)
 
-    # var 1: p0->t0, p1->t1
+    # opt 1: p0->t0, p1->t1
     score_01 = ((y_pred == p0) & (y_true == t0)).sum() + ((y_pred == p1) & (y_true == t1)).sum()
-    # var 2: p0->t1, p1->t0
+    # opt 2: p0->t1, p1->t0
     score_10 = ((y_pred == p0) & (y_true == t1)).sum() + ((y_pred == p1) & (y_true == t0)).sum()
 
     if score_01 >= score_10:
@@ -56,7 +73,11 @@ def best_map_labels(y_true, y_pred):
         return np.where(y_pred == p0, t1, t0)
 
 
-def compute_metrics(y_true, y_pred_mapped):
+def compute_metrics(
+        y_true: pd.Series,
+        y_pred_mapped: np.ndarray,
+) -> dict[str, float]:
+    """Compute clustering scores."""
 
     scores = {
         'balanced_accuracy': balanced_accuracy_score(y_true, y_pred_mapped),
@@ -73,7 +94,13 @@ def compute_metrics(y_true, y_pred_mapped):
     return scores
 
 
-def plot_metric_cm_heatmaps(df_res, cm, labels_cm, title_cm):
+def plot_metric_cm_heatmaps(
+        df_res: pd.DataFrame,
+        cm: np.ndarray,
+        labels_cm: list[str],
+        title_cm: str,
+) -> None:
+    """Plot score heatmaps and a confusion matrix."""
 
     metrics = [
         ('balanced_accuracy', 'Balanced accuracy', 'viridis'),
@@ -124,7 +151,14 @@ def plot_metric_cm_heatmaps(df_res, cm, labels_cm, title_cm):
     plt.show()
 
 
-def plot_clustermap(dfX, y_true, y_cluster_mapped, metric, linkage_method):
+def plot_clustermap(
+        dfX: pd.DataFrame,
+        y_true: pd.Series,
+        y_cluster_mapped: pd.Series,
+        metric: str,
+        linkage_method: str,
+) -> None:
+    """Plot a clustermap with row annotations."""
 
     true_levels = sorted(y_true.unique())
     cluster_levels = sorted(y_cluster_mapped.unique())
@@ -188,7 +222,16 @@ def plot_clustermap(dfX, y_true, y_cluster_mapped, metric, linkage_method):
     plt.show()
 
 
-def cluster_breast_cancer_target_vs_rest(df_bg_genes_scaled, genes, y_subtype_genefu, target_label, metrics, linkages, plot):
+def cluster_breast_cancer_target_vs_rest(
+        df_bg_genes_scaled: pd.DataFrame,
+        genes: list[str],
+        y_subtype_genefu: pd.Series,
+        target_label: str,
+        metrics: list[str],
+        linkages: list[str],
+        plot: bool,
+) -> ClusteringResult:
+    """Run one target-vs-rest clustering step."""
 
     X_df = df_bg_genes_scaled.loc[:, genes].copy()
     X = X_df.to_numpy()

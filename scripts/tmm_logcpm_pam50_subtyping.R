@@ -1,3 +1,6 @@
+# TMM normalization and PAM50 subtyping helpers.
+# This module wraps edgeR-based normalization and genefu-based subtype classification.
+
 if (!requireNamespace('BiocManager', quietly = TRUE)) {
   install.packages('BiocManager')
 }
@@ -16,11 +19,18 @@ invisible(capture.output(
 ))
 
 
+#' Run TMM normalization and logCPM transform for a TSV count matrix.
+#'
+#' @param input_tsv Path to the input TSV file (rownames in the first column, donors x genes, counts).
+#' @param output_tsv Path to the output TSV file (rownames in the first column, donors x genes, TMM + logCPM).
+#' @param prior_count Prior count for logCPM.
+#' @param return_df Whether to return the result.
+#' @param save Whether to save the result.
+#'
+#' @return A data frame with normalized expression, or NULL.
 tmm_logcpm_tsv <- function(input_tsv, output_tsv, prior_count = 1.0, return_df = TRUE, save = TRUE) {
-  # input: TSV with rownames in first column, donors x genes (counts)
-  # output: TSV with rownames in first column, donors x genes (TMM + logCPM)
   
-  cat('[tmm_logcpm_tsv] reading:', input_tsv, '\n'); flush.console()
+  cat('[tmm_logcpm_tsv] reading:', input_tsv, '\n') 
   t0 <- proc.time()
 
   counts_df <- read.table(
@@ -33,7 +43,7 @@ tmm_logcpm_tsv <- function(input_tsv, output_tsv, prior_count = 1.0, return_df =
     row.names = 1
   )
   
-  cat('[tmm_logcpm_tsv] running edgeR DGEList + TMM + cpm(log=TRUE)\n'); flush.console()
+  cat('[tmm_logcpm_tsv] running edgeR DGEList + TMM + cpm(log=TRUE)\n') 
 
   # edgeR expects genes x samples
   d <- DGEList(counts = t(as.matrix(counts_df)))
@@ -45,11 +55,11 @@ tmm_logcpm_tsv <- function(input_tsv, output_tsv, prior_count = 1.0, return_df =
   out_df <- as.data.frame(t(lcpm))
 
   if (save == TRUE) {
-    cat('[tmm_logcpm_tsv] writing:', output_tsv, '\n'); flush.console()
+    cat('[tmm_logcpm_tsv] writing:', output_tsv, '\n') 
     write.table(out_df, file = output_tsv, sep = '\t', quote = FALSE, col.names = NA)
   }
   
-  cat('[tmm_logcpm_tsv] done in sec:', (proc.time() - t0)[['elapsed']], '\n'); flush.console()
+  cat('[tmm_logcpm_tsv] done in sec:', (proc.time() - t0)[['elapsed']], '\n') 
 
   if (return_df == TRUE){
     return(out_df)
@@ -57,6 +67,11 @@ tmm_logcpm_tsv <- function(input_tsv, output_tsv, prior_count = 1.0, return_df =
 }
 
 
+#' Run PAM50 subtyping with genefu.
+#'
+#' @param expr_df Expression matrix.
+#'
+#' @return A data frame with subtype labels.
 pam50_genefu_subtyping <- function(expr_df) {
 
   expr <- as.matrix(expr_df)  # samples x genes

@@ -1,3 +1,10 @@
+"""
+Utilities for pseudobulk construction from single-cell data.
+
+This module aggregates raw counts by donor and cell type group.
+Can optionally save the resulting count matrix and sample metadata.
+"""
+
 from pathlib import Path
 
 import numpy as np
@@ -6,16 +13,17 @@ from anndata import AnnData
 
 
 def make_pseudobulks(
-    adata: AnnData,
-    donor_col: str,
-    group_col: str,
-    min_cells: int = 20,
-    return_pb: bool = False,
-    save: bool = True,
-    out_dir: str | Path | None = None,
-    counts_name: str = 'pseudobulks_counts_gene_by_sample.tsv',
-    meta_name: str = 'pseudobulks_sample_metadata.tsv',
+        adata: AnnData,
+        donor_col: str,
+        group_col: str,
+        min_cells: int = 20,
+        return_pb: bool = False,
+        save: bool = True,
+        out_dir: str | Path | None = None,
+        counts_name: str = 'pseudobulks_counts_gene_by_sample.tsv',
+        meta_name: str = 'pseudobulks_sample_metadata.tsv',
 ) -> tuple[pd.DataFrame, pd.DataFrame] | None:
+    """Aggregate raw counts by donor and cell type group."""
 
     obs = adata.obs.loc[:, [donor_col, group_col]].copy()
     obs[donor_col] = obs[donor_col].astype(str)
@@ -53,16 +61,16 @@ def make_pseudobulks(
 
     keep = meta_pb['n_cells'].ge(min_cells).to_numpy()
     pb = pb[keep, :]
+    pb_df = pd.DataFrame(
+        pb,
+        index=meta_pb['sample_id'],
+        columns=adata.raw.var_names
+    )
     meta_pb = meta_pb.loc[keep].copy().reset_index(drop=True)
 
     if save:
         out_dir = Path(out_dir)
         out_dir.mkdir(parents=True, exist_ok=True)
-        pb_df = pd.DataFrame(
-            pb,
-            index=meta_pb['sample_id'],
-            columns=adata.raw.var_names
-        )
         pb_df.to_csv(out_dir / counts_name, sep='\t')
         meta_pb.to_csv(out_dir / meta_name, sep='\t', index=False)
 
